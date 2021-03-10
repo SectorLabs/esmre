@@ -17,11 +17,7 @@
 # USA
 
 from setuptools import setup, Extension
-from Cython.Build import cythonize
 
-module1 = Extension(
-    "esm", ["src/esm.pyx", "src/esm/aho_corasick.c", "src/esm/ac_list.c"]
-)
 
 with open("README.md", "r") as readme:
     long_description = readme.read()
@@ -43,15 +39,24 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Text Processing :: Indexing",
     ],
-    install_requires=["setuptools"],
+    setup_requires=["setuptools>=18.0", "Cython"],
     author="Will Harris",
     author_email="esmre@greatlibrary.net",
     url="http://code.google.com/p/esmre/",
     license="GNU LGPL",
     platforms=["POSIX"],
-    ext_modules=cythonize([module1]),
+    ext_modules=[
+        Extension(
+            "esm",
+            [
+                "src/esm.pyx",
+                "src/esm/aho_corasick.c",
+                "src/esm/ac_list.c",
+            ]
+        ),
+    ],
     package_dir={"": "src"},
     py_modules=["esmre"],
     test_suite="nose.collector",
-    tests_require="nose",
+    tests_require=["nose"],
 )
